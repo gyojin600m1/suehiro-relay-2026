@@ -13,7 +13,17 @@ for r in data["races"]:
     if ranks.count(4) > 1:
         raise SystemExit(f"✗ {r['no']} は4位が同着です。上位4人を機械的に決められません。")
     n4 = len([x for x in ok if x["rank"] and x["rank"] <= 4])
-    print(f"  {r['no']} {r['gender']}: {len(ok)}名中 上位4人 = {n4}名")
+    if n4 != 4:
+        raise SystemExit(f"✗ {r['no']} の上位4人が {n4}名になっています。")
+    # 補欠は1人だけ。かつ上位4人と重ならないこと。
+    subs = [x for x in ok if x.get("reserve")]
+    if len(subs) != 1:
+        raise SystemExit(f"✗ {r['no']} の補欠が {len(subs)}名です。1名にしてください。")
+    if subs[0]["rank"] and subs[0]["rank"] <= 4:
+        raise SystemExit(f"✗ {r['no']} の補欠 {subs[0]['name']} が上位4人に入っています。")
+    if r.get("reserve", {}).get("name") != subs[0]["name"]:
+        raise SystemExit(f"✗ {r['no']} の reserve と results の補欠が一致しません。")
+    print(f"  {r['no']} {r['gender']}: {len(ok)}名中 上位4人=4名 / 補欠={subs[0]['name']}（{subs[0]['rank']}位）")
 
 tpl = io.open(os.path.join(HERE, "template.html"), encoding="utf-8").read()
 payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")

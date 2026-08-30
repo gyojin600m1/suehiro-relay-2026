@@ -54,7 +54,8 @@
      "team": "鹿児島情報高",
      "time": "28.84",
      "entry": "28.45",
-     "status": "通常"
+     "status": "通常",
+     "reserve": true
     },
     {
      "rank": 5,
@@ -86,7 +87,14 @@
      "entry": "28.80",
      "status": "通常"
     }
-   ]
+   ],
+   "reserve": {
+    "name": "薗田 朱莉",
+    "team": "鹿児島情報高",
+    "grade": "高2",
+    "time": "28.84",
+    "rank": 5
+   }
   },
   {
    "no": "No.36",
@@ -140,7 +148,8 @@
      "team": "鹿児島情報高",
      "time": "24.80",
      "entry": "24.88",
-     "status": "通常"
+     "status": "通常",
+     "reserve": true
     },
     {
      "rank": 6,
@@ -232,7 +241,14 @@
      "entry": "25.40",
      "status": "通常"
     }
-   ]
+   ],
+   "reserve": {
+    "name": "和氣 敬斗",
+    "team": "鹿児島情報高",
+    "grade": "高2",
+    "time": "24.80",
+    "rank": 5
+   }
   }
  ]
 }

@@ -35,6 +35,8 @@ main{padding:12px 12px 30px}
 .mem:first-of-type{border-top:0}
 .mem .ord{flex:0 0 auto;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
   background:linear-gradient(135deg,#c9a227,#8a6d10);color:#fff;font-weight:900;font-size:12px}
+.mem.sub{border-top:1px dashed rgba(143,163,200,.45)}
+.mem.sub .ord{background:var(--card2);color:var(--muted);border:1px solid var(--border);font-size:11px}
 .mem .who{flex:1;min-width:0}
 .mem .nm{font-weight:700;font-size:14px;overflow-wrap:anywhere}
 .mem .mt{color:var(--muted);font-size:11.5px;margin-top:2px;overflow-wrap:anywhere}
@@ -57,6 +59,8 @@ main{padding:12px 12px 30px}
 .sm{color:var(--dim);font-size:10.5px;text-align:right;margin-top:2px}
 .tag{display:inline-block;background:rgba(255,204,102,.15);color:var(--gold);
   border:1px solid rgba(255,204,102,.4);border-radius:6px;padding:1px 6px;font-size:10px;font-weight:700;margin-left:5px}
+.tag.sub{background:rgba(143,163,200,.15);color:#c3d3ee;border-color:rgba(143,163,200,.45)}
+.row.sub{border-color:rgba(143,163,200,.4);background:rgba(143,163,200,.06)}
 .tie{background:rgba(255,120,120,.13);border:1px solid rgba(255,120,120,.4);color:#ffc9c9;
   border-radius:10px;padding:9px 11px;font-size:12.5px;line-height:1.7;margin-bottom:10px}
 .ft{margin-top:24px;padding-top:14px;border-top:1px solid var(--border2);
@@ -91,7 +95,13 @@ function memberBlock(r){
         <div class="mt">${esc(x.team)}${x.grade?" / "+esc(x.grade):""}</div></div>
       <div class="tm">${esc(x.time)}</div>
     </div>`).join("");
-  return `<div class="pick"><h3>🏅 上位4人＝リレーメンバー</h3>${rows}</div>` +
+  const sub = r.reserve ? `<div class="mem sub">
+      <div class="ord">補</div>
+      <div class="who"><div class="nm">${esc(r.reserve.name)}<span class="tag sub">補欠</span></div>
+        <div class="mt">${esc(r.reserve.team)}${r.reserve.grade?" / "+esc(r.reserve.grade):""}</div></div>
+      <div class="tm">${esc(r.reserve.time)}</div>
+    </div>` : "";
+  return `<div class="pick"><h3>🏅 リレーメンバー（4人＋補欠）</h3>${rows}${sub}</div>` +
     (tie ? `<div class="tie">4位が同着のため、上位4人がこの表だけでは決まりません。大会本部の発表を確認してください。</div>` : "");
 }
 
@@ -100,9 +110,9 @@ function raceBlock(r){
   const ok = r.results.filter(x => x.status === "通常");
   const rows = r.results.map(x => {
     const inTop = x.status === "通常" && x.rank && x.rank <= 4;
-    return `<div class="row ${g}${inTop?" in":""}">
+    return `<div class="row ${g}${inTop?" in":(x.reserve?" sub":"")}">
       <div class="rk ${rkc(x.rank)}">${x.status!=="通常" ? "-" : (x.rank||"-")}</div>
-      <div><div class="nm">${esc(x.name)}${inTop?'<span class="tag">選出</span>':""}</div>
+      <div><div class="nm">${esc(x.name)}${inTop?'<span class="tag">選出</span>':(x.reserve?'<span class="tag sub">補欠</span>':"")}</div>
         <div class="mt">${esc(x.team)}${x.grade?" / "+esc(x.grade):""}</div></div>
       <div><div class="tm">${x.status!=="通常"?esc(x.status):esc(x.time)}</div>
         <div class="sm">申込 ${esc(x.entry||"-")}</div></div>
@@ -116,7 +126,7 @@ function raceBlock(r){
 
 document.getElementById("main").innerHTML =
   `<div class="lead">末弘杯の<b>県別対抗 4×50mリレー</b>の選手を決めるレースです。
-    このレースの<b>上位4人</b>が男女それぞれのリレーメンバーになります。</div>` +
+    このレースの<b>上位4人</b>が男女それぞれのリレーメンバー、<b>もう1人が補欠</b>です。</div>` +
   DATA.races.map(raceBlock).join("") +
   `<div class="ft">非公式のページです。正式なメンバーは大会本部の発表を確認してください。転載はご遠慮ください。<br>
      <a href="https://gyojin600m1.github.io/kagoshima-hs-shinjin-results/">県高校新人 結果</a> ／
