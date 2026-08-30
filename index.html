@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src https://abacus.jasoncameron.dev; base-uri 'none'; form-action 'none'">
+<title>末弘杯 県別対抗リレー 選手選考</title>
+<style>
+:root{
+  --male:#1565c0; --female:#b71c6e;
+  --maleText:#6fb7ff; --femaleText:#ff92c2;
+  --bg:#0a0f1c; --card:#121b2e; --card2:#0f1729;
+  --border:#263149; --border2:#1b2740;
+  --text:#e8eefc; --muted:#8fa3c8; --dim:#6b7c9e;
+  --accent:#4da3ff; --gold:#ffcc66;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+  font-size:14px;line-height:1.5;max-width:520px;margin:0 auto;padding-bottom:env(safe-area-inset-bottom)}
+.hd{background:linear-gradient(135deg,#0a1628,#0d2547);border-bottom:1px solid var(--border);padding:14px}
+.hd h1{font-size:17px;margin-bottom:3px}
+.hd .sub{font-size:11.5px;color:var(--muted);line-height:1.6}
+main{padding:12px 12px 30px}
+.lead{background:rgba(255,204,102,.1);border:1px solid rgba(255,204,102,.3);border-radius:12px;
+  padding:11px 13px;font-size:13px;line-height:1.7;color:#ffe9bd;margin-bottom:14px}
+.lead b{color:var(--gold)}
+.gsec{display:flex;align-items:center;gap:7px;margin:18px 0 9px;font-weight:700;font-size:14px}
+.gsec.m{color:var(--maleText);border-bottom:2px solid var(--male);padding-bottom:5px}
+.gsec.f{color:var(--femaleText);border-bottom:2px solid var(--female);padding-bottom:5px}
+.gsec .n{margin-left:auto;font-size:11.5px;color:var(--dim);font-weight:600}
+.pick{background:var(--card);border:1px solid rgba(255,204,102,.4);border-radius:12px;padding:11px 12px;margin-bottom:12px}
+.pick h3{font-size:12.5px;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.mem{display:flex;align-items:center;gap:9px;padding:8px 0;border-top:1px solid var(--border)}
+.mem:first-of-type{border-top:0}
+.mem .ord{flex:0 0 auto;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  background:linear-gradient(135deg,#c9a227,#8a6d10);color:#fff;font-weight:900;font-size:12px}
+.mem .who{flex:1;min-width:0}
+.mem .nm{font-weight:700;font-size:14px;overflow-wrap:anywhere}
+.mem .mt{color:var(--muted);font-size:11.5px;margin-top:2px;overflow-wrap:anywhere}
+.mem .tm{font-variant-numeric:tabular-nums;font-weight:900;font-size:14px}
+.row{position:relative;display:grid;grid-template-columns:32px 1fr auto;gap:9px;align-items:center;
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:9px 11px 9px 14px;margin-bottom:6px;overflow:hidden}
+.row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
+.row.m::before{background:var(--male)} .row.f::before{background:var(--female)}
+.row.in{border-color:rgba(255,204,102,.45);background:rgba(255,204,102,.07)}
+.rk{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;
+  background:var(--card2);color:var(--accent);font-weight:900;font-size:13px}
+.rk.g1{background:linear-gradient(135deg,#c9a227,#8a6d10);color:#fff}
+.rk.g2{background:linear-gradient(135deg,#9aa7b4,#6b7682);color:#fff}
+.rk.g3{background:linear-gradient(135deg,#b07440,#7d4f27);color:#fff}
+.rk.g4{background:linear-gradient(135deg,#4a7fb5,#2d5580);color:#fff}
+.nm{font-weight:700;font-size:13.5px;overflow-wrap:anywhere}
+.mt{color:var(--muted);font-size:11px;margin-top:2px;overflow-wrap:anywhere}
+.tm{font-variant-numeric:tabular-nums;font-weight:900;font-size:13.5px;text-align:right}
+.sm{color:var(--dim);font-size:10.5px;text-align:right;margin-top:2px}
+.tag{display:inline-block;background:rgba(255,204,102,.15);color:var(--gold);
+  border:1px solid rgba(255,204,102,.4);border-radius:6px;padding:1px 6px;font-size:10px;font-weight:700;margin-left:5px}
+.tie{background:rgba(255,120,120,.13);border:1px solid rgba(255,120,120,.4);color:#ffc9c9;
+  border-radius:10px;padding:9px 11px;font-size:12.5px;line-height:1.7;margin-bottom:10px}
+.ft{margin-top:24px;padding-top:14px;border-top:1px solid var(--border2);
+  color:var(--dim);font-size:10.5px;line-height:1.8;text-align:center}
+.ct{margin-top:6px}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="hd">
+  <h1 id="hdT"></h1>
+  <div class="sub" id="hdS"></div>
+</div>
+<main id="main"></main>
+<script>
+const DATA = /*__DATA__*/{"meet":"第88回末弘杯 県別対抗リレー 選手選考レース","date":"2026年8月29日(土)","races":[{"no":"No.35","gender":"女子","results":[{"rank":1,"name":"中島 和奏","kana":"なかしま わかな","grade":"高1","team":"鹿児島情報高","time":"28.30","entry":"28.03","status":"通常"},{"rank":2,"name":"戌亥 望美","kana":"いぬい のぞみ","grade":"高2","team":"甲南","time":"28.61","entry":"29.00","status":"通常"},{"rank":3,"name":"前ノ園杏奈","kana":"まえのその あんな","grade":"高2","team":"鹿児島高","time":"28.63","entry":"28.50","status":"通常"},{"rank":4,"name":"有馬  花","kana":"ありま はな","grade":"高1","team":"鹿屋女子","time":"28.82","entry":"28.50","status":"通常"},{"rank":5,"name":"薗田 朱莉","kana":"そのだ しゅり","grade":"高2","team":"鹿児島情報高","time":"28.84","entry":"28.45","status":"通常"},{"rank":5,"name":"三角 莉子","kana":"みすみ りこ","grade":"高1","team":"鹿児島女子","time":"28.84","entry":"28.87","status":"通常"},{"rank":7,"name":"松本 萌愛","kana":"まつもと もあ","grade":"高2","team":"甲南","time":"29.33","entry":"29.49","status":"通常"},{"rank":8,"name":"三島帆之華","kana":"みしま ほのか","grade":"高1","team":"鹿児島女子","time":"29.34","entry":"28.80","status":"通常"}]},{"no":"No.36","gender":"男子","results":[{"rank":1,"name":"中村 斗雅","kana":"なかむら とうま","grade":"高2","team":"鹿児島高","time":"24.23","entry":"23.26","status":"通常"},{"rank":2,"name":"岡村 相佑","kana":"おかむら そうすけ","grade":"高2","team":"鹿児島情報高","time":"24.36","entry":"24.70","status":"通常"},{"rank":3,"name":"松山翔太郎","kana":"まつやま しょうたろう","grade":"高2","team":"鹿児島高","time":"24.59","entry":"24.48","status":"通常"},{"rank":4,"name":"小嶺恵太朗","kana":"こみね けいたろう","grade":"高2","team":"鹿児島情報高","time":"24.67","entry":"24.92","status":"通常"},{"rank":5,"name":"和氣 敬斗","kana":"わけ けいと","grade":"高2","team":"鹿児島情報高","time":"24.80","entry":"24.88","status":"通常"},{"rank":6,"name":"児玉 来夢","kana":"こだま らいむ","grade":"高2","team":"鹿児島情報高","time":"24.97","entry":"24.90","status":"通常"},{"rank":7,"name":"川畑 琉維","kana":"かわばた るい","grade":"高2","team":"鹿屋工業","time":"25.34","entry":"25.05","status":"通常"},{"rank":8,"name":"チェイペン騎士","kana":"ちぇいぺん ないと","grade":"高2","team":"鹿屋工業","time":"25.58","entry":"25.05","status":"通常"},{"rank":9,"name":"福元 結貴","kana":"ふくもと ゆうき","grade":"高1","team":"鹿児島玉龍","time":"25.70","entry":"25.24","status":"通常"},{"rank":10,"name":"中山 結惺","kana":"なかやま ゆうせい","grade":"高2","team":"川内","time":"25.71","entry":"25.30","status":"通常"},{"rank":11,"name":"徳留凜太朗","kana":"とくどめ りんたろう","grade":"高1","team":"鹿児島高","time":"25.79","entry":"25.39","status":"通常"},{"rank":12,"name":"髙山 泰平","kana":"たかやま たいへい","grade":"高1","team":"甲南","time":"25.86","entry":"25.77","status":"通常"},{"rank":13,"name":"中村  駿","kana":"なかむら しゅん","grade":"高1","team":"鹿児島高","time":"26.17","entry":"25.25","status":"通常"},{"rank":14,"name":"有島  輝","kana":"ありしま ひかる","grade":"高2","team":"加治木","time":"26.36","entry":"25.40","status":"通常"}]}]}/*__DATA_END__*/;
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const gcls = g => g === "男子" ? "m" : "f";
+const gmark = g => g === "男子" ? "🔵" : "🔴";
+const rkc = r => r===1?"g1":r===2?"g2":r===3?"g3":r===4?"g4":"";
+
+document.getElementById("hdT").textContent = DATA.meet;
+document.getElementById("hdS").textContent = DATA.date + "　鴨池公園水泳プール（第34回 県高校新人 No.35・36）";
+
+function memberBlock(r){
+  const ok = r.results.filter(x => x.status === "通常");
+  const picked = ok.filter(x => x.rank && x.rank <= 4);
+  const tie = ok.filter(x => x.rank === 4).length > 1;
+  const rows = picked.map((x,i) => `<div class="mem">
+      <div class="ord">${i+1}</div>
+      <div class="who"><div class="nm">${esc(x.name)}</div>
+        <div class="mt">${esc(x.team)}${x.grade?" / "+esc(x.grade):""}</div></div>
+      <div class="tm">${esc(x.time)}</div>
+    </div>`).join("");
+  return `<div class="pick"><h3>🏅 上位4人＝リレーメンバー</h3>${rows}</div>` +
+    (tie ? `<div class="tie">4位が同着のため、上位4人がこの表だけでは決まりません。大会本部の発表を確認してください。</div>` : "");
+}
+
+function raceBlock(r){
+  const g = gcls(r.gender);
+  const ok = r.results.filter(x => x.status === "通常");
+  const rows = r.results.map(x => {
+    const inTop = x.status === "通常" && x.rank && x.rank <= 4;
+    return `<div class="row ${g}${inTop?" in":""}">
+      <div class="rk ${rkc(x.rank)}">${x.status!=="通常" ? "-" : (x.rank||"-")}</div>
+      <div><div class="nm">${esc(x.name)}${inTop?'<span class="tag">選出</span>':""}</div>
+        <div class="mt">${esc(x.team)}${x.grade?" / "+esc(x.grade):""}</div></div>
+      <div><div class="tm">${x.status!=="通常"?esc(x.status):esc(x.time)}</div>
+        <div class="sm">申込 ${esc(x.entry||"-")}</div></div>
+    </div>`;
+  }).join("");
+  return `<div class="gsec ${g}">${gmark(r.gender)} ${esc(r.gender)}　${esc(r.no)} 50m自由形
+      <span class="n">${ok.length}名</span></div>
+    ${memberBlock(r)}
+    ${rows}`;
+}
+
+document.getElementById("main").innerHTML =
+  `<div class="lead">末弘杯の<b>県別対抗 4×50mリレー</b>の選手を決めるレースです。
+    このレースの<b>上位4人</b>が男女それぞれのリレーメンバーになります。</div>` +
+  DATA.races.map(raceBlock).join("") +
+  `<div class="ft">非公式のページです。正式なメンバーは大会本部の発表を確認してください。転載はご遠慮ください。<br>
+     <a href="https://gyojin600m1.github.io/kagoshima-hs-shinjin-results/">県高校新人 結果</a> ／
+     <a href="https://gyojin600m1.github.io/kagoshima-hs-shinjin-entry/">エントリー確認</a>
+     <div class="ct" id="ct"></div></div>`;
+
+(function count(){
+  const el = document.getElementById("ct"); if(!el) return;
+  const NS = "suehiro-relay-2026", K = "cnt:"+NS, today = new Date().toISOString().slice(0,10);
+  let hit = true;
+  try { hit = localStorage.getItem(K) !== today; } catch(_){}
+  if(hit){ try { localStorage.setItem(K, today); } catch(_){} }
+  fetch("https://abacus.jasoncameron.dev/" + (hit?"hit":"get") + "/" + NS + "/views")
+    .then(r=>r.json()).then(d=>{ el.textContent = "👀 " + d.value + " 回閲覧"; }).catch(()=>{});
+})();
+</script>
+</body>
+</html>
